@@ -1,24 +1,43 @@
-const { EmbedBuilder } = require('discord.js');
+const { submitTime } = require('../utils/db/submitTime');
 
-//TODO: Create logic to update DB based on the type of reaction.
-module.exports = async (interaction, user) => {
-  console.log(interaction.emoji.name);
-  if (interaction.emoji.name !== '👍' && interaction.emoji.name !== '👎') {
-    return;
-  }
-  console.dir(interaction, { depth: null, colors: true });
-  return;
-  // Fetch the channel by ID and send the embed
-  const channel = await interaction.client.channels.fetch(
-    '1267621876432375879'
-  );
-  if (channel) {
-    //   await channel.send({ embeds: [embed] });
-    await interaction.reply({ content: 'Submitted!' });
-  } else {
-    await interaction.reply({
-      content: 'Channel not found!',
-      ephemeral: true,
+module.exports = {
+  reactionHandler: async (reaction, user) => {
+    // When a reaction is received, check if the structure is partial
+    if (reaction.partial) {
+      // If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
+      try {
+        await reaction.fetch();
+      } catch (error) {
+        console.error('Something went wrong when fetching the message:', error);
+        return;
+      }
+    }
+    const message = reaction.message;
+    const totalEmojis = [];
+    message.reactions.cache.forEach((reaction) => {
+      totalEmojis.push(reaction.emoji.name);
     });
-  }
+    const noActionReq =
+      !totalEmojis.includes('✅') || !totalEmojis.includes('❌');
+    const users = (await reaction.users.fetch()).map((user) =>
+      user.globalName ? user.globalName : user.username
+    );
+
+    //TODO: Update the length >= to > 3
+    if (reaction.emoji.name === '👍' && noActionReq) {
+      if (totalEmojis?.length >= 1 && !totalEmojis.includes('👎')) {
+        submitTime(reaction, user).then((status) => {
+          // message.react(status ? '✅' : '❌');
+        });
+      } else if (totalEmojis?.length >= 1 && totalEmojis.includes('👎')) {
+        await reaction.message.reply(
+          `This submission cannot be submitted since **${users}** rejected the submission. Have these users re-review the submission if needed.`
+        );
+      }
+    } else {
+      console.log(
+        'Bot has already approved/denied this submission. No action.'
+      );
+    }
+  },
 };

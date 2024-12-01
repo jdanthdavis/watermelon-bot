@@ -7,9 +7,9 @@ module.exports = async (interaction) => {
   const options = interaction.options;
   const member = interaction.member;
   const boss = options.getString('boss');
-  // const teamSize = options.getInteger('team-size');
-  // const teamMembers = options.getString('team-members');
-  // const time = options.getString('time-achieved');
+  const teamSize = options.getInteger('team-size');
+  const teamMembers = options.getString('team-members');
+  const time = options.getString('time-achieved');
   const submitter = member.nickname ? member.nickname : member.username;
   // const ssLink = options.getString('screenshot-link');
 
@@ -18,14 +18,9 @@ module.exports = async (interaction) => {
     .setColor(0x0099ff)
     .setTitle('**Submission Received!**')
     .setDescription(
-      'React with a 👍 to approve this submission\n\nReact with a 👎 to deny this submission.\n'
+      'React with a 👍 to approve this submission\nor a 👎 to deny this submission.'
     )
     .addFields(
-      // {
-      //   name: 'Submission ID',
-      //   value: submissionID.toString(),
-      //   inline: false,
-      // },
       {
         name: 'Submitter',
         value: submitter,
@@ -35,22 +30,22 @@ module.exports = async (interaction) => {
         name: 'Boss',
         value: boss,
         inline: false,
+      },
+      {
+        name: 'Time',
+        value: time,
+        inline: false,
+      },
+      {
+        name: 'Team Size',
+        value: teamSize?.toString(),
+        inline: false,
+      },
+      {
+        name: 'Team List',
+        value: teamMembers,
+        inline: false,
       }
-      // {
-      //   name: 'Time',
-      //   value: time,
-      //   inline: false,
-      // },
-      // {
-      //   name: 'Team Size',
-      //   value: teamSize?.toString(),
-      //   inline: false,
-      // },
-      // {
-      //   name: 'Team List',
-      //   value: teamMembers,
-      //   inline: false,
-      // }
     )
     .setThumbnail(
       'https://raw.githubusercontent.com/jdanthdavis/leaderboard-bot/refs/heads/main/levi.png'
