@@ -2,7 +2,10 @@ const { boardBuilder } = require('./boardBuilder');
 const { getAllTimes } = require('./db/getAllTimes');
 const { raidSorter } = require('./raidSorter');
 const { wipeBoard } = require('./wipeBoard');
-const { masterRaidsList } = require('../raidConstants');
+const {
+  masterRaidsList,
+  modifiedMasterRaidsList,
+} = require('../raidConstants');
 require('dotenv').config();
 
 async function sortTimes(times, header, channel) {
@@ -23,7 +26,7 @@ async function buildBoard(channel) {
   console.log('Building board...');
   const getTimes = await getAllTimes();
   const bossTimes = getTimes // should be 19 total bosses
-    .filter((boss) => !masterRaidsList.includes(boss.bossName))
+    .filter((boss) => !modifiedMasterRaidsList.includes(boss.bossName))
     .sort((a, b) => {
       // Remove "The " from the beginning of the bossName if it exists
       const aName = a.bossName.startsWith('The ')
@@ -56,7 +59,7 @@ async function buildBoard(channel) {
 
 module.exports = {
   refreshBoard: async (channel) => {
-    // await wipeBoard(channel);
+    await wipeBoard(channel);
     await buildBoard(channel);
     console.log('Refresh completed!');
   },
