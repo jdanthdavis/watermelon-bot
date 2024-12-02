@@ -1,9 +1,9 @@
 const { Events, Client, GatewayIntentBits, Partials } = require('discord.js');
-const submitHanlder = require('./events/submitHandler');
+const { submitHanlder } = require('./events/submitHandler');
 const { reactionHandler } = require('./events/reactionHandler');
 const { refreshBoard } = require('./utils/refreshBoard');
-const cron = require('node-cron');
 const { wipeBoard } = require('./utils/wipeBoard');
+const cron = require('node-cron');
 require('dotenv').config();
 
 const { BOT_TOKEN, CLIENT_ID, GUILD_ID, MY_ID, LEADERBOARD_CHANNEL } =
