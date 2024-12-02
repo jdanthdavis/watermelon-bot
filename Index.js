@@ -25,13 +25,10 @@ const runRefreshJob = () => {
   refreshBoard(client);
 };
 
-// cron.schedule('*/1 * * * *', runRefreshJob, {
-//   timezone: 'America/New_York',
-// });
 // Runs once a week at 10PM EST
-// cron.schedule('0 22 * * 0', runRefreshJob, {
-//   timezone: 'America/New_York',
-// });
+cron.schedule('0 22 * * 0', runRefreshJob, {
+  timezone: 'America/New_York',
+});
 
 client.on('interactionCreate', async (interaction) => {
   if (interaction.isCommand()) {
