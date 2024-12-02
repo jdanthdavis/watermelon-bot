@@ -53,17 +53,26 @@ module.exports = {
      * Updates the submitted boss and pushes the new submission into the existing times array.
      */
     const addToExistingBoss = async () => {
-      const help = { players: teamList, teamSize: teamSize, killTime: newTime };
-      BossTimes.updateOne(
-        { bossName: Boss }, // Find the document with the matching bossName
-        { $push: { times: help } } // Push the new time entry into the 'times' array
-      );
-
       try {
-        completed = true;
-        console.log(
-          `${Boss}'s times have been updated with a submission time of ${newTime}.`
+        const fields = {
+          players: teamList,
+          teamSize: teamSize,
+          killTime: newTime,
+        };
+
+        // Use await to ensure the update completes before moving on
+        const result = await BossTimes.updateOne(
+          { bossName: Boss }, // Find the document with the matching bossName
+          { $push: { times: fields } } // Push the new time entry into the 'times' array
         );
+
+        // Check if the update was successful
+        if (result.modifiedCount > 0) {
+          completed = true;
+          console.log(
+            `${Boss}'s times have been updated with a submission time of ${newTime}.`
+          );
+        }
       } catch (error) {
         console.error(
           `Error updating ${Boss}'s times with submission time of ${newTime}, ${error}`

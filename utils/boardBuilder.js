@@ -19,9 +19,9 @@ function buildDesc(playerInfo) {
 }
 
 module.exports = {
-  boardBuilder: async (bossInfo) => {
+  boardBuilder: async (bossInfo, color) => {
     const embed = new EmbedBuilder()
-      .setColor(0x0099ff)
+      .setColor(color)
       .setTitle(bossInfo.bossName)
       .setDescription(
         Array.isArray(bossInfo.times) && bossInfo.times.length > 0

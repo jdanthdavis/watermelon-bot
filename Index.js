@@ -3,6 +3,7 @@ const { submitHanlder } = require('./events/submitHandler');
 const { reactionHandler } = require('./events/reactionHandler');
 const { refreshBoard } = require('./utils/refreshBoard');
 const { wipeBoard } = require('./utils/wipeBoard');
+const { deleteAllTimes } = require('./utils/db/deleteAllTimes');
 const cron = require('node-cron');
 require('dotenv').config();
 
@@ -73,10 +74,20 @@ client.on('messageCreate', async (message) => {
   if (message.author.id === CLIENT_ID && message.author !== MY_ID) return;
   const { LEADERBOARD_CHANNEL } = process.env;
   const channel = await client.channels.fetch(LEADERBOARD_CHANNEL);
-  if (message.content.toLowerCase() === '.buildnow') {
-    refreshBoard(channel);
-  } else if (message.content.toLowerCase() === '.wipenow') {
-    wipeBoard(channel);
+  const content = message.content.toLowerCase();
+
+  switch (content) {
+    case '.buildnow':
+      refreshBoard(channel);
+      return;
+    case '.wipenow':
+      wipeBoard(channel);
+      return;
+    case '.cleartimes':
+      deleteAllTimes(channel);
+    default:
+      console.log('Command does not exist.');
+      return;
   }
 });
 

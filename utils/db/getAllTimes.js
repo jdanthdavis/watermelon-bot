@@ -1,7 +1,7 @@
 const Time = require('../../models/leaderBoard');
 
 module.exports = {
-  getAllTimes: async (type) => {
+  getAllTimes: async () => {
     try {
       let records;
       // Query all records from the 'times' collection

@@ -9,10 +9,12 @@ const {
 require('dotenv').config();
 
 async function sortTimes(times, header, channel) {
+  const colors = [0x00ff00, 0xffc0cb];
   await channel.send(header);
   await Promise.all(
-    times.map(async (bosses) => {
-      const embed = await boardBuilder(bosses);
+    times.map(async (bosses, index) => {
+      const color = colors[index % colors.length];
+      const embed = await boardBuilder(bosses, color);
       await channel.send({ embeds: [embed] });
     })
   );

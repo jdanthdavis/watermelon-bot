@@ -38,7 +38,6 @@ module.exports = {
         !emojiBlockers
       ) {
         submitTime(reaction, user).then((status) => {
-          console.log(`Status: ${status}`);
           message.react(status ? '✅' : '❌');
         });
       } else if (emojiBlockers && user.id !== CLIENT_ID) {
