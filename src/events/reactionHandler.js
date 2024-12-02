@@ -1,4 +1,6 @@
 const { submitTime } = require('../utils/db/submitTime');
+require('dotenv').config();
+const { CLIENT_ID } = process.env;
 
 module.exports = {
   reactionHandler: async (reaction, user) => {
@@ -17,27 +19,53 @@ module.exports = {
     message.reactions.cache.forEach((reaction) => {
       totalEmojis.push(reaction.emoji.name);
     });
-    const noActionReq =
-      !totalEmojis.includes('✅') || !totalEmojis.includes('❌');
+    const approvals = totalEmojis.filter((x) => x === '👍')?.length;
+    const emojiBlockers =
+      totalEmojis.includes('✅') || totalEmojis.includes('❌');
     const users = (await reaction.users.fetch()).map((user) =>
       user.globalName ? user.globalName : user.username
     );
 
-    //TODO: Update the length >= to > 3
-    if (reaction.emoji.name === '👍' && noActionReq) {
-      if (totalEmojis?.length >= 1 && !totalEmojis.includes('👎')) {
-        submitTime(reaction, user).then((status) => {
-          // message.react(status ? '✅' : '❌');
-        });
-      } else if (totalEmojis?.length >= 1 && totalEmojis.includes('👎')) {
-        await reaction.message.reply(
+    //TODO: Update approvals >= 1 to > 3
+    if (reaction.emoji.name === '👍' || reaction.emoji.name === '👎') {
+      if (approvals >= 1 && totalEmojis.includes('👎')) {
+        await message.reply(
           `This submission cannot be submitted since **${users}** rejected the submission. Have these users re-review the submission if needed.`
         );
+      } else if (
+        approvals >= 1 &&
+        !totalEmojis.includes('👎') &&
+        !emojiBlockers
+      ) {
+        submitTime(reaction, user).then((status) => {
+          console.log(`Status: ${status}`);
+          message.react(status ? '✅' : '❌');
+        });
+      } else if (emojiBlockers && user.id !== CLIENT_ID) {
+        await message.reply(
+          `This submission can no longer be approved/denied.`
+        );
       }
-    } else {
-      console.log(
-        'Bot has already approved/denied this submission. No action.'
-      );
     }
+
+    //TODO: Update the length >= to > 3
+    // if (reaction.emoji.name === '👍' && noActionReq) {
+    //   if (
+    //     totalEmojis?.length >= 1 &&
+    //     !totalEmojis.includes('👎') &&
+    //     !totalEmojis.includes('❌') &&
+    //     !totalEmojis.includes('✅')
+    //   ) {
+    //     submitTime(reaction, user).then((status) => {
+    //       message.react(status ? '✅' : '❌');
+    //     });
+    //   } else if (totalEmojis?.length >= 1 && totalEmojis.includes('👎')) {
+    //     await message.reply(
+    //       `This submission cannot be submitted since **${users}** rejected the submission. Have these users re-review the submission if needed.`
+    //     );
+    //   }
+    // } else if (user.id !== CLIENT_ID) {
+    //   await message.reply('This submission can no longer be approved/denied.');
+    // }
   },
 };

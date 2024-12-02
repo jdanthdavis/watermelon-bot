@@ -12,7 +12,8 @@ const timeSchema = new Schema({
 // Define the Boss schema
 const bossSchema = new Schema({
   bossName: { type: String, required: true },
-  times: [timeSchema], // Embedding the time schema as an array
+  times: [timeSchema],
+  bossImg: { type: String, required: false },
 });
 
 const bossTimesCollection = mongoose.createConnection(process.env.MONGO_URI, {

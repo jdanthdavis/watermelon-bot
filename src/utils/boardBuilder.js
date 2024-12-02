@@ -28,9 +28,7 @@ module.exports = {
           ? buildDesc(bossInfo)
           : 'No submissions.'
       )
-      .setThumbnail(
-        'https://raw.githubusercontent.com/jdanthdavis/leaderboard-bot/refs/heads/main/levi.png'
-      );
+      .setThumbnail(bossInfo.bossImg);
 
     return embed;
   },

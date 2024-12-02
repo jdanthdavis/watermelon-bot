@@ -59,11 +59,5 @@ module.exports = async (interaction) => {
   );
   if (channel) {
     await channel.send({ embeds: [embed] });
-    await interaction.reply({ content: 'Submitted!' });
-  } else {
-    await interaction.reply({
-      content: 'Channel not found!',
-      ephemeral: true,
-    });
   }
 };
