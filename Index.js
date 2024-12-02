@@ -1,7 +1,6 @@
 const { Events, Client, GatewayIntentBits, Partials } = require('discord.js');
 const submitHanlder = require('./events/submitHandler');
 const { reactionHandler } = require('./events/reactionHandler');
-const { buildBoardNow } = require('./buildBoardNow');
 const { refreshBoard } = require('./utils/refreshBoard');
 const cron = require('node-cron');
 require('dotenv').config();
