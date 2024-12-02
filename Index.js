@@ -3,9 +3,11 @@ const submitHanlder = require('./events/submitHandler');
 const { reactionHandler } = require('./events/reactionHandler');
 const { refreshBoard } = require('./utils/refreshBoard');
 const cron = require('node-cron');
+const { wipeBoard } = require('./utils/wipeBoard');
 require('dotenv').config();
 
-const { BOT_TOKEN, CLIENT_ID, GUILD_ID, MY_ID } = process.env;
+const { BOT_TOKEN, CLIENT_ID, GUILD_ID, MY_ID, LEADERBOARD_CHANNEL } =
+  process.env;
 
 const client = new Client({
   intents: [
@@ -72,8 +74,12 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 // Forces the bot to refresh the board.
 client.on('messageCreate', async (message) => {
   if (message.author.id === CLIENT_ID && message.author !== MY_ID) return;
+  const { LEADERBOARD_CHANNEL } = process.env;
+  const channel = await client.channels.fetch(LEADERBOARD_CHANNEL);
   if (message.content.toLowerCase() === '.buildnow') {
-    refreshBoard(client);
+    refreshBoard(channel);
+  } else if (message.content.toLowerCase() === '.wipenow') {
+    wipeBoard(channel);
   }
 });
 

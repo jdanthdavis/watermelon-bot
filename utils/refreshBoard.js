@@ -1,6 +1,7 @@
 const { boardBuilder } = require('./boardBuilder');
 const { getAllTimes } = require('./db/getAllTimes');
 const { raidSorter } = require('./raidSorter');
+const { wipeBoard } = require('./wipeBoard');
 const { masterRaidsList } = require('../raidConstants');
 require('dotenv').config();
 
@@ -68,10 +69,8 @@ async function buildBoard(channel) {
 }
 
 module.exports = {
-  refreshBoard: async (client) => {
-    const { LEADERBOARD_CHANNEL } = process.env;
-    const channel = await client.channels.fetch(LEADERBOARD_CHANNEL);
-    await deleteBoard(channel);
+  refreshBoard: async (channel) => {
+    await wipeBoard(channel);
     await buildBoard(channel);
     console.log('Refresh completed!');
   },
