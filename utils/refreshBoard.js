@@ -5,20 +5,6 @@ const { wipeBoard } = require('./wipeBoard');
 const { masterRaidsList } = require('../raidConstants');
 require('dotenv').config();
 
-/**
- * Wipes the leaderboards
- * @param {*} channel
- */
-async function deleteBoard(channel) {
-  console.log('Deleting...');
-  let messages = await channel.messages.fetch({ limit: 100 });
-  try {
-    await channel.bulkDelete(messages);
-  } catch (error) {
-    console.error(`Could not delete messages.`, error);
-  }
-}
-
 async function sortTimes(times, header, channel) {
   await channel.send(header);
   await Promise.all(
@@ -70,7 +56,7 @@ async function buildBoard(channel) {
 
 module.exports = {
   refreshBoard: async (channel) => {
-    await wipeBoard(channel);
+    // await wipeBoard(channel);
     await buildBoard(channel);
     console.log('Refresh completed!');
   },
