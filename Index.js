@@ -4,6 +4,7 @@ const { reactionHandler } = require('./events/reactionHandler');
 const { refreshBoard } = require('./utils/refreshBoard');
 const { wipeBoard } = require('./utils/wipeBoard');
 const { deleteAllTimes } = require('./utils/db/deleteAllTimes');
+const { buildBosses } = require('./utils/buildBosses');
 const cron = require('node-cron');
 require('dotenv').config();
 
@@ -85,6 +86,9 @@ client.on('messageCreate', async (message) => {
       return;
     case '.cleartimes':
       deleteAllTimes(channel);
+    case '.buildbosses':
+      buildBosses(channel);
+      return;
     default:
       console.log('Command does not exist.');
       return;
