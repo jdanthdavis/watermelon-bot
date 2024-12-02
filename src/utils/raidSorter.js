@@ -1,19 +1,7 @@
+const { raidCategories, raidSuffix, groupSIze } = require('../raidConstants');
+
 module.exports = {
   raidSorter: (raidTimes, raidName) => {
-    // Define the category and suffix groups
-    const categoryOrder = ['Theatre of Blood', 'CoX', 'TOA'];
-    const suffixOrder = [': HM', ': CM', ': Expert'];
-    const groupSizeOrder = [
-      'Solo',
-      'Duo',
-      'Trio',
-      '4 Man',
-      '5 Man',
-      '6 Man',
-      '7 Man',
-      '8 Man',
-    ];
-
     // Filter raidTimes by raidName
     const filteredRaidTimes = raidTimes.filter((raid) => {
       if (raidName === 'CM') {
@@ -35,17 +23,17 @@ module.exports = {
       // return raids with the base raid name, excluding the suffixes
       return (
         raid.bossName.includes(raidName) &&
-        !suffixOrder.some((suffix) => raid.bossName.includes(suffix))
+        !raidSuffix.some((suffix) => raid.bossName.includes(suffix))
       );
     });
 
     // Custom comparator function for sorting
     return filteredRaidTimes.sort((a, b) => {
       // Compare category order (Theatre of Blood, CoX, TOA)
-      const categoryA = categoryOrder.findIndex((cat) =>
+      const categoryA = raidCategories.findIndex((cat) =>
         a.bossName.includes(cat)
       );
-      const categoryB = categoryOrder.findIndex((cat) =>
+      const categoryB = raidCategories.findIndex((cat) =>
         b.bossName.includes(cat)
       );
 
@@ -54,10 +42,10 @@ module.exports = {
       }
 
       // Compare suffixes (ensure : HM, : CM, : Expert are handled)
-      const suffixA = suffixOrder.findIndex((suffix) =>
+      const suffixA = raidSuffix.findIndex((suffix) =>
         a.bossName.includes(suffix)
       );
-      const suffixB = suffixOrder.findIndex((suffix) =>
+      const suffixB = raidSuffix.findIndex((suffix) =>
         b.bossName.includes(suffix)
       );
 
@@ -66,12 +54,8 @@ module.exports = {
       }
 
       // Compare group size order (Solo, Duo, Trio, etc.)
-      const sizeA = groupSizeOrder.findIndex((size) =>
-        a.bossName.includes(size)
-      );
-      const sizeB = groupSizeOrder.findIndex((size) =>
-        b.bossName.includes(size)
-      );
+      const sizeA = groupSIze.findIndex((size) => a.bossName.includes(size));
+      const sizeB = groupSIze.findIndex((size) => b.bossName.includes(size));
 
       return sizeA - sizeB;
     });

@@ -1,13 +1,13 @@
 const { boardBuilder } = require('./utils/boardBuilder');
 const { getAllTimes } = require('./utils/db/getAllTimes');
 const { raidSorter } = require('./utils/raidSorter');
-const raidsList = require('./raidList');
+const { masterRaidsList } = require('./raidConstants');
 
 module.exports = {
   buildBoardNow: async (message) => {
     const getTimes = await getAllTimes();
     const bossTimes = getTimes // should be 19 total bosses
-      .filter((boss) => !raidsList.includes(boss.bossName))
+      .filter((boss) => !masterRaidsList.includes(boss.bossName))
       .sort((a, b) => {
         // Remove "The " from the beginning of the bossName if it exists
         const aName = a.bossName.startsWith('The ')
@@ -20,7 +20,7 @@ module.exports = {
         return aName.localeCompare(bName);
       });
     const raidTimes = getTimes.filter((boss) =>
-      raidsList.includes(boss.bossName)
+      masterRaidsList.includes(boss.bossName)
     );
     const sortedToBTimes = raidSorter(raidTimes, 'Theatre of Blood');
     const sortedHMTimes = raidSorter(raidTimes, 'HM');
@@ -31,7 +31,7 @@ module.exports = {
 
     await Promise.all(
       bossTimes.map(async (tobTimes) => {
-        const embed = await boardBuilder(tobTimes, message);
+        const embed = await boardBuilder(tobTimes);
         await message.channel.send({ embeds: [embed] });
       })
     );

@@ -47,25 +47,5 @@ module.exports = {
         );
       }
     }
-
-    //TODO: Update the length >= to > 3
-    // if (reaction.emoji.name === '👍' && noActionReq) {
-    //   if (
-    //     totalEmojis?.length >= 1 &&
-    //     !totalEmojis.includes('👎') &&
-    //     !totalEmojis.includes('❌') &&
-    //     !totalEmojis.includes('✅')
-    //   ) {
-    //     submitTime(reaction, user).then((status) => {
-    //       message.react(status ? '✅' : '❌');
-    //     });
-    //   } else if (totalEmojis?.length >= 1 && totalEmojis.includes('👎')) {
-    //     await message.reply(
-    //       `This submission cannot be submitted since **${users}** rejected the submission. Have these users re-review the submission if needed.`
-    //     );
-    //   }
-    // } else if (user.id !== CLIENT_ID) {
-    //   await message.reply('This submission can no longer be approved/denied.');
-    // }
   },
 };

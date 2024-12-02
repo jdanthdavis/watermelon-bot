@@ -5,23 +5,7 @@ module.exports = {
     try {
       let records;
       // Query all records from the 'times' collection
-      // const records = await Time.find();
-      if (type === 'raids') {
-        records = await Time.find({
-          bossName: {
-            $in: [
-              'Theatre of Blood',
-              'Theatre of Blood: HM',
-              'CoX',
-              'Cox: CM',
-              'TOA',
-              'TOA: Expert',
-            ],
-          },
-        });
-      } else {
-        records = await Time.find();
-      }
+      records = await Time.find();
 
       // If no records are found, log an appropriate message
       if (records.length === 0) {

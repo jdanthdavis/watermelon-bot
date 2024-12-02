@@ -1,15 +1,8 @@
+const { partyFinderRaidsList } = require('../raidConstants');
+
 module.exports = {
   raidPartyFinder: (raid, raidSize) => {
-    const raidsList = [
-      'CoX',
-      'CoX: CM',
-      'Theatre of Blood',
-      'Theatre of Blood: HM',
-      'TOA',
-      'TOA: Expert',
-    ];
-
-    if (!raidsList.includes(raid)) return raid;
+    if (!partyFinderRaidsList.includes(raid)) return raid;
 
     let raidKey;
     switch (raidSize) {
