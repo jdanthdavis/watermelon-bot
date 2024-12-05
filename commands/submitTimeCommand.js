@@ -4,7 +4,7 @@ const { convertTime } = require('../utils/convertTime');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('submit')
+    .setName('submit-time')
     .setDescription('Submit your PB for review.')
     .addStringOption((option) => {
       return option

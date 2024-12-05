@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 const path = require('path');
 
 module.exports = {
-  submitHanlder: async (interaction) => {
+  submitTimeHandler: async (interaction) => {
     if (!interaction.isCommand()) return;
 
     const options = interaction.options;

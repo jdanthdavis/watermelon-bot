@@ -1,5 +1,6 @@
 const { Events, Client, GatewayIntentBits, Partials } = require('discord.js');
-const { submitHanlder } = require('./events/submitHandler');
+const { submitTimeHandler } = require('./events/submitTimeHandler');
+const { submitPetHandler } = require('./events/submitPetHandler');
 const { reactionHandler } = require('./events/reactionHandler');
 const { refreshBoard } = require('./utils/refreshBoard');
 const { wipeBoard } = require('./utils/wipeBoard');
@@ -36,12 +37,18 @@ client.on('interactionCreate', async (interaction) => {
     const commandName = interaction.commandName;
 
     switch (commandName) {
-      case 'submit':
-        const submitCommand = require('./commands/submitCommand');
-        await submitCommand.execute(interaction).then(() => {
-          submitHanlder(interaction);
+      case 'submit-time':
+        const submitTimeCommand = require('./commands/submitTimeCommand');
+        await submitTimeCommand.execute(interaction).then(() => {
+          submitTimeHandler(interaction);
         });
         return;
+      case 'submit-pet':
+        const submitPetCommand = require('./commands/submitPetCommand');
+        await submitPetCommand.execute(interaction).then(() => {
+          submitPetHandler(interaction);
+          return;
+        });
       case 'request':
         const requestCommand = require('./commands/requestCommand');
         await requestCommand.execute(interaction);
@@ -59,8 +66,8 @@ client.on('interactionCreate', async (interaction) => {
     const { commandName } = interaction;
 
     if (commandName === 'submit') {
-      const submitCommand = require('./commands/submitCommand');
-      await submitCommand.autocomplete(interaction);
+      const submitTimeCommand = require('./commands/submitTimeCommand');
+      await submitTimeCommand.autocomplete(interaction);
     }
   }
 });
